@@ -6,9 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * @author : jaeglee
@@ -19,32 +18,25 @@ import java.util.List;
  * @date : 2025. 2. 3. AM 11:06
  * @modifyed :
  **/
-@DisplayName("ParameterNamesModule 등록")
+@DisplayName("JacksonAutoConfiguration에 의해 생성된 ObjectMapper")
 @Slf4j
-public class JacksonWithParameterNamesModuleTest {
+@SpringBootTest
+public class JacksonWithAutoConfigurationTest {
+    @Autowired
+    private ObjectMapper objectMapper;
 
-
-    private ObjectMapper getObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new ParameterNamesModule());
-        return objectMapper;
-    }
-
-    @DisplayName("ParameterNamesModule 적용 > Person > 정상 생성")
+    @DisplayName("Person > 정상 생성")
     @Test
     void test001_class_Test001() {
-        ObjectMapper objectMapper = getObjectMapper();
         Assertions.assertDoesNotThrow(()->{
             Person obj = objectMapper.readValue("{ \"name\":\"jaeglee\", \"age\": 99 }", Person.class);
             log.info("obj : {}", obj);
         });
     }
 
-    @DisplayName("ParameterNamesModule 적용 > ProposalPerson > 정상 생성")
+    @DisplayName("ProposalPerson > 정상 생성")
     @Test
     void test001_class_Test002() {
-        ObjectMapper objectMapper = getObjectMapper();
-
         Assertions.assertDoesNotThrow(()->{
             ProposalPerson obj = objectMapper.readValue("{ \"name\":\"jaeglee\", \"age\": 99 }", ProposalPerson.class);
             log.info("obj : {}", obj);
